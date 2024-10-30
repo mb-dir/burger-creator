@@ -1,5 +1,6 @@
 <script setup lang="ts">
-	import InputNumber from "@/components/InputNumber.vue";
+	import { ref } from "vue";
+	import Ingredient from "@/components/Ingredient.vue";
 	// Not going to change via user actions, no need to keep it as ref
 	const photos: string[] = [
 		"bottom-bun",
@@ -32,30 +33,21 @@
 			photo: ingredientImages[photo],
 		};
 	});
+
+	type burgerIngredient = {
+		name: string;
+		photo: string;
+	};
+
+	const burger = ref<burgerIngredient[]>([]);
 </script>
 
 <template>
 	<main>
 		<h1>Burger Creator</h1>
 		<div class="grid-wrapper">
-			<div class="creator">
-				<div class="creator__ingredients">
-					<div
-						class="ingredient"
-						v-for="ingredient in ingredients"
-						:key="ingredient.id"
-					>
-						<InputNumber />
-						<div class="ingredient__bg">
-							<img
-								:src="ingredient.photo"
-								:alt="ingredient.name"
-								class="ingredient__picture"
-							/>
-						</div>
-						<span class="ingredient__name">{{ ingredient.name }}</span>
-					</div>
-				</div>
+			<div class="creator__ingredients">
+				<Ingredient v-for="ingredient in ingredients" :ingredient />
 			</div>
 
 			<div class="burger-summary">Burger Boży</div>
