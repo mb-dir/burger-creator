@@ -3,36 +3,43 @@
 	import type { burgerIngredient } from "@/types";
 	import Ingredient from "@/components/Ingredient.vue";
 	// Not going to change via user actions, no need to keep it as ref
-	const photos: string[] = [
+	const photoNames: string[] = [
 		"bottom-bun",
+		"top-bun",
+		"tomato",
 		"ingredient-burger",
-		"ingredient-cheese",
 		"ingredient-fish",
 		"lettuce",
-		"tomato",
-		"top-bun",
+		"ingredient-cheese",
 	];
 
-	// https://stackoverflow.com/questions/66419471/vue-3-vite-dynamic-image-src
-	const ingredientImages = photos.reduce((images, photo) => {
-		images[photo] = new URL(
-			`../assets/imgs/${photo}.png`,
-			import.meta.url
-		).href;
-		return images;
-	}, {} as Record<string, string>);
+	// Generate image URLs for each photo
+	function generatePhotoUrl(name: string): string {
+		// https://stackoverflow.com/questions/66419471/vue-3-vite-dynamic-image-src
+		return new URL(`../assets/imgs/${name}.png`, import.meta.url).href;
+	}
 
-	const ingredients = photos.map((photo, index) => {
-		const name = photo
-			.split("-")
-			.map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+	// Logic for converting photo names to objects with all required properties
+	const ingredients = photoNames.map((name, index) => {
+		const nameParts = name.split("-");
+		const finalName = nameParts
+			.map((word) => `${word.charAt(0).toUpperCase()}${word.slice(1)}`)
 			.join(" ");
 
-		return {
+		// Create the base ingredient object
+		const ingredient: burgerIngredient = {
 			id: index + 1,
-			name,
-			photo: ingredientImages[photo],
+			name: finalName,
+			photo: generatePhotoUrl(name),
 		};
+
+		// Check if the photo name starts with "ingredient-" then we have to convert name and create extra photo url
+		if (name.startsWith("ingredient-")) {
+			ingredient.name = finalName.replace("Ingredient ", "");
+			ingredient.burgerIngredientPhoto = generatePhotoUrl(nameParts[1]);
+		}
+
+		return ingredient;
 	});
 
 	const burger = ref<burgerIngredient[]>([]);
@@ -66,7 +73,21 @@
 				/>
 			</div>
 
-			<div class="burger-summary">{{ burger }}</div>
+			<div class="burger-summary">
+				<h2 class="burger-summary__title">Your Burger</h2>
+				<div class="burger-summary__burger" v-if="burger.length > 0">
+					<img
+						v-for="ingredient in burger"
+						:src="ingredient.burgerIngredientPhoto || ingredient.photo"
+						alt=""
+						class="burger-summary__ingredient"
+					/>
+				</div>
+				<span v-else class="burger-summary__no-content"
+					>Add items to create Your burger. First item must be bottom bun. To
+					finish Your burger choose top bun</span
+				>
+			</div>
 		</div>
 	</main>
 </template>
@@ -107,7 +128,17 @@
 		text-wrap: nowrap;
 	}
 
-	.burger-summary {
-		border: 1px solid red;
+	.burger-summary__burger {
+		display: flex;
+		align-items: center;
+		flex-direction: column-reverse;
+	}
+
+	.burger-summary__ingredient {
+		width: 100px;
+	}
+
+	.burger-summary__no-content {
+		color: var(--secondary-text-color);
 	}
 </style>
