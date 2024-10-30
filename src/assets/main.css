@@ -4,6 +4,8 @@ body {
 	font-family: "Snowburst One", system-ui;
 	background-color: var(--primary-bg-color);
 	color: var(--primary-text-color);
+	padding: 0;
+	margin: 0;
 }
 
 *,
@@ -17,6 +19,6 @@ body {
 :root {
 	--primary-bg-color: #76564b;
 	--primary-text-color: #baa999;
-	--secondary-text-color: ##6ba3cf;
+	--secondary-text-color: #6ba3cf;
 	--danger-color: #e11311;
 }
