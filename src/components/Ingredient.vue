@@ -17,9 +17,9 @@
 		emit("removeIngredient", ingredient);
 	}
 
-	function onIncrease(): void {
+	function onIncrease(htmlInputNumberRef: HTMLInputElement): void {
 		const ingredient = getIngredient();
-		emit("addIngredient", ingredient);
+		emit("addIngredient", ingredient, htmlInputNumberRef);
 	}
 </script>
 

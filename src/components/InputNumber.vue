@@ -1,5 +1,5 @@
 <script setup lang="ts">
-	import { ref, watch } from "vue";
+	import { ref } from "vue";
 
 	const htmlInputNumber = ref<null | HTMLInputElement>(null);
 
@@ -12,9 +12,8 @@
 	function increase() {
 		error.value = null;
 
-		emit("increase");
+		emit("increase", htmlInputNumber.value);
 
-		htmlInputNumber.value?.stepUp();
 		htmlInputNumber.value?.dispatchEvent(
 			new Event("input", { bubbles: true, cancelable: true })
 		);

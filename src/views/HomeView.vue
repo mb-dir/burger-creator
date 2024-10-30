@@ -13,6 +13,8 @@
 		"ingredient-cheese",
 	];
 
+	const error = ref<null | string>(null);
+
 	// Generate image URLs for each photo
 	function generatePhotoUrl(name: string): string {
 		// https://stackoverflow.com/questions/66419471/vue-3-vite-dynamic-image-src
@@ -44,7 +46,17 @@
 
 	const burger = ref<burgerIngredient[]>([]);
 
-	function onAddIngredient(ingredient: burgerIngredient): void {
+	function onAddIngredient(
+		ingredient: burgerIngredient,
+		htmlInputNumberRef: HTMLInputElement
+	): void {
+		error.value = null;
+		if (burger.value.length === 0 && ingredient.id !== 1) {
+			error.value = "First item must be bottom bun";
+			return;
+		}
+		// Only after validated adding new ingredient increase its number
+		htmlInputNumberRef.stepUp();
 		burger.value.push(ingredient);
 	}
 
@@ -83,10 +95,11 @@
 						class="burger-summary__ingredient"
 					/>
 				</div>
-				<span v-else class="burger-summary__no-content"
+				<span v-else-if="!error" class="burger-summary__no-content"
 					>Add items to create Your burger. First item must be bottom bun. To
 					finish Your burger choose top bun</span
 				>
+				<span v-if="error" class="burger-summary__error">{{ error }}</span>
 			</div>
 		</div>
 	</main>
@@ -140,5 +153,9 @@
 
 	.burger-summary__no-content {
 		color: var(--secondary-text-color);
+	}
+
+	.burger-summary__error {
+		color: var(--danger-color);
 	}
 </style>
