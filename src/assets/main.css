@@ -1,35 +1,22 @@
-@import './base.css';
+/* Global styles */
 
-#app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  font-weight: normal;
+body {
+	font-family: "Snowburst One", system-ui;
+	background-color: var(--primary-bg-color);
+	color: var(--primary-text-color);
 }
 
-a,
-.green {
-  text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
-  transition: 0.4s;
-  padding: 3px;
+*,
+*::after,
+&::before {
+	box-sizing: border-box;
 }
 
-@media (hover: hover) {
-  a:hover {
-    background-color: hsla(160, 100%, 37%, 0.2);
-  }
-}
+/* Variables */
 
-@media (min-width: 1024px) {
-  body {
-    display: flex;
-    place-items: center;
-  }
-
-  #app {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 0 2rem;
-  }
+:root {
+	--primary-bg-color: #76564b;
+	--primary-text-color: #baa999;
+	--secondary-text-color: ##6ba3cf;
+	--danger-color: #e11311;
 }
