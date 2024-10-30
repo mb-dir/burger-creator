@@ -6,6 +6,7 @@ body {
 	color: var(--primary-text-color);
 	padding: 0;
 	margin: 0;
+	text-align: center;
 }
 
 *,
@@ -18,7 +19,7 @@ body {
 
 :root {
 	--primary-bg-color: #76564b;
-	--primary-text-color: #baa999;
+	--primary-text-color: #fefce7;
 	--secondary-text-color: #6ba3cf;
 	--danger-color: #e11311;
 }
