@@ -2,6 +2,7 @@
 	import { computed, ref } from "vue";
 	import type { burgerIngredient } from "@/types";
 	import Ingredient from "@/components/Ingredient.vue";
+	import BurgerRenderer from "@/components/BurgerRenderer.vue";
 	// Not going to change via user actions, no need to keep it as ref
 	const photoNames: string[] = [
 		"bottom-bun",
@@ -51,9 +52,11 @@
 		return ingredient;
 	});
 
-	const burger = ref<burgerIngredient[]>([]);
+	const burgerIngredients = ref<burgerIngredient[]>([]);
 
-	const isBurgerFinish = computed(() => burger.value.some((el) => el.id === 2));
+	const isBurgerFinish = computed(() =>
+		burgerIngredients.value.some((el) => el.id === 2)
+	);
 
 	function onAddIngredient(
 		ingredient: burgerIngredient,
@@ -62,12 +65,12 @@
 		error.value = null;
 
 		// Bottom bun has id 1, top bun has id 2
-		if (burger.value.length === 0 && ingredient.id !== 1) {
+		if (burgerIngredients.value.length === 0 && ingredient.id !== 1) {
 			error.value = "First item must be bottom bun";
 			return;
 		}
 
-		if (burger.value.length > 0 && ingredient.id === 1) {
+		if (burgerIngredients.value.length > 0 && ingredient.id === 1) {
 			error.value = "You can add only one bottom bun";
 			return;
 		}
@@ -82,24 +85,24 @@
 			return;
 		}
 
-		if (burger.value.length === 8 && ingredient.id !== 2) {
+		if (burgerIngredients.value.length === 8 && ingredient.id !== 2) {
 			error.value =
 				"The maximum number of items is nine including buns. Last item must be top bun";
 			return;
 		}
 		// Only after validated adding new ingredient increase its number
 		htmlInputNumberRef.stepUp();
-		burger.value.push(ingredient);
+		burgerIngredients.value.push(ingredient);
 	}
 
 	function onRemoveIngredient(ingredient: burgerIngredient): void {
-		const lastIndex: number = burger.value.findLastIndex(
+		const lastIndex: number = burgerIngredients.value.findLastIndex(
 			(item: burgerIngredient) => item.id === ingredient.id
 		);
 
 		// If findLastIndex doesnt find anything it returns -1
 		if (lastIndex >= 0) {
-			burger.value.splice(lastIndex, 1);
+			burgerIngredients.value.splice(lastIndex, 1);
 		}
 	}
 
@@ -114,11 +117,12 @@
 
 		const readyBurger = {
 			name: form.value.burgerName,
-			ingredients: burger.value,
+			ingredients: burgerIngredients.value,
 		};
 
 		burgers.push(readyBurger);
-		burger.value = [];
+		burgerIngredients.value = [];
+		form.value.burgerName = "";
 
 		localStorage.setItem("burgers", JSON.stringify(burgers));
 
@@ -143,13 +147,8 @@
 			<div class="burger-summary">
 				<h2 class="burger-summary__title">Your Burger</h2>
 				<div v-if="error" class="burger-summary__error">{{ error }}</div>
-				<div class="burger-summary__burger" v-if="burger.length > 0">
-					<img
-						v-for="ingredient in burger"
-						:src="ingredient.burgerIngredientPhoto || ingredient.photo"
-						alt=""
-						class="burger-summary__ingredient"
-					/>
+				<div class="burger-summary__burger" v-if="burgerIngredients.length > 0">
+					<BurgerRenderer :burgerIngredients />
 				</div>
 				<span v-else-if="!error" class="burger-summary__no-content"
 					>Add items to create Your burger. First item must be bottom bun. To
@@ -212,16 +211,6 @@
 
 	.ingredient__name {
 		text-wrap: nowrap;
-	}
-
-	.burger-summary__burger {
-		display: flex;
-		align-items: center;
-		flex-direction: column-reverse;
-	}
-
-	.burger-summary__ingredient {
-		width: 100px;
 	}
 
 	.burger-summary__no-content {
