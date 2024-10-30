@@ -2,9 +2,6 @@
 	// Not going to change via user actions, no need to keep it as ref
 	const photos: string[] = [
 		"bottom-bun",
-		"burger",
-		"cheese",
-		"fish",
 		"ingredient-burger",
 		"ingredient-cheese",
 		"ingredient-fish",
@@ -74,12 +71,11 @@
 
 	.creator__ingredients {
 		display: grid;
-		grid-template-columns: repeat(3, 150px);
+		grid-template-columns: repeat(3, 175px);
 		gap: 32px;
 	}
 
 	.ingredient {
-		height: 220px;
 		display: flex;
 		flex-direction: column;
 		gap: 12px;
@@ -87,7 +83,7 @@
 
 	.ingredient__bg {
 		background-color: var(--primary-text-color);
-		height: 75%;
+		height: 175px;
 		border-radius: 50%;
 		display: flex;
 		justify-content: center;
@@ -95,12 +91,15 @@
 	}
 
 	.ingredient__picture {
-		max-width: 75%;
-		max-height: 75%;
+		width: 75%;
 	}
 
 	.ingredient__ammount {
 		width: 100%;
+	}
+
+	.ingredient__name {
+		text-wrap: nowrap;
 	}
 
 	.burger-summary {
