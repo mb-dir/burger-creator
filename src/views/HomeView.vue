@@ -51,8 +51,32 @@
 		htmlInputNumberRef: HTMLInputElement
 	): void {
 		error.value = null;
+
+		// Bottom bun has id 1, top bun has id 2
 		if (burger.value.length === 0 && ingredient.id !== 1) {
 			error.value = "First item must be bottom bun";
+			return;
+		}
+
+		if (burger.value.length > 0 && ingredient.id === 1) {
+			error.value = "You can add only one bottom bun";
+			return;
+		}
+
+		const isTopBunAlreadyAdded = burger.value.some((el) => el.id === 2);
+		if (isTopBunAlreadyAdded && ingredient.id !== 2) {
+			error.value = "You cannot add ingredient on top of the bun";
+			return;
+		}
+
+		if (isTopBunAlreadyAdded && ingredient.id === 2) {
+			error.value = "You can add only one top bun";
+			return;
+		}
+
+		if (burger.value.length === 8 && ingredient.id !== 2) {
+			error.value =
+				"The maximum number of items is nine including buns. Last item must be top bun";
 			return;
 		}
 		// Only after validated adding new ingredient increase its number
@@ -87,6 +111,7 @@
 
 			<div class="burger-summary">
 				<h2 class="burger-summary__title">Your Burger</h2>
+				<div v-if="error" class="burger-summary__error">{{ error }}</div>
 				<div class="burger-summary__burger" v-if="burger.length > 0">
 					<img
 						v-for="ingredient in burger"
@@ -99,7 +124,6 @@
 					>Add items to create Your burger. First item must be bottom bun. To
 					finish Your burger choose top bun</span
 				>
-				<span v-if="error" class="burger-summary__error">{{ error }}</span>
 			</div>
 		</div>
 	</main>
@@ -157,5 +181,6 @@
 
 	.burger-summary__error {
 		color: var(--danger-color);
+		margin: 20px 0;
 	}
 </style>
