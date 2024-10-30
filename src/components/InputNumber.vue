@@ -5,10 +5,14 @@
 
 	const model = defineModel({ default: 0 });
 
+	const emit = defineEmits(["decrease", "increase"]);
+
 	const error = ref<null | string>(null);
 
 	function increase() {
 		error.value = null;
+
+		emit("increase");
 
 		htmlInputNumber.value?.stepUp();
 		htmlInputNumber.value?.dispatchEvent(
@@ -24,6 +28,7 @@
 			error.value = "Ingredient number must be positive";
 			return;
 		}
+		emit("decrease");
 		htmlInputNumber.value?.stepDown();
 		htmlInputNumber.value?.dispatchEvent(
 			new Event("input", { bubbles: true, cancelable: true })

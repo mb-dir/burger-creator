@@ -1,23 +1,31 @@
 <script setup lang="ts">
-	import { ref } from "vue";
+	import type { burgerIngredient } from "@/types";
 	import InputNumber from "@/components/InputNumber.vue";
 
-	type burgerIngredient = {
-		id: number;
-		name: string;
-		photo: string;
-	};
-
-	defineProps<{
+	const props = defineProps<{
 		ingredient: burgerIngredient;
 	}>();
 
-	const burger = ref<burgerIngredient[]>([]);
+	function getIngredient(): burgerIngredient {
+		return props.ingredient;
+	}
+
+	const emit = defineEmits(["addIngredient", "removeIngredient"]);
+
+	function onDecrease(): void {
+		const ingredient = getIngredient();
+		emit("removeIngredient", ingredient);
+	}
+
+	function onIncrease(): void {
+		const ingredient = getIngredient();
+		emit("addIngredient", ingredient);
+	}
 </script>
 
 <template>
 	<div class="ingredient">
-		<InputNumber />
+		<InputNumber @decrease="onDecrease" @increase="onIncrease" />
 		<div class="ingredient__bg">
 			<img
 				:src="ingredient.photo"

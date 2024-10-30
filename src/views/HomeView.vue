@@ -1,5 +1,6 @@
 <script setup lang="ts">
 	import { ref } from "vue";
+	import type { burgerIngredient } from "@/types";
 	import Ingredient from "@/components/Ingredient.vue";
 	// Not going to change via user actions, no need to keep it as ref
 	const photos: string[] = [
@@ -34,12 +35,22 @@
 		};
 	});
 
-	type burgerIngredient = {
-		name: string;
-		photo: string;
-	};
-
 	const burger = ref<burgerIngredient[]>([]);
+
+	function onAddIngredient(ingredient: burgerIngredient): void {
+		burger.value.push(ingredient);
+	}
+
+	function onRemoveIngredient(ingredient: burgerIngredient): void {
+		const lastIndex: number = burger.value.findLastIndex(
+			(item: burgerIngredient) => item.id === ingredient.id
+		);
+
+		// If findLastIndex doesnt find anything it returns -1
+		if (lastIndex >= 0) {
+			burger.value.splice(lastIndex, 1);
+		}
+	}
 </script>
 
 <template>
@@ -47,10 +58,15 @@
 		<h1>Burger Creator</h1>
 		<div class="grid-wrapper">
 			<div class="creator__ingredients">
-				<Ingredient v-for="ingredient in ingredients" :ingredient />
+				<Ingredient
+					v-for="ingredient in ingredients"
+					:ingredient
+					@addIngredient="onAddIngredient"
+					@removeIngredient="onRemoveIngredient"
+				/>
 			</div>
 
-			<div class="burger-summary">Burger Boży</div>
+			<div class="burger-summary">{{ burger }}</div>
 		</div>
 	</main>
 </template>
