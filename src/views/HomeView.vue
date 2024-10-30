@@ -1,4 +1,5 @@
 <script setup lang="ts">
+	import InputNumber from "@/components/InputNumber.vue";
 	// Not going to change via user actions, no need to keep it as ref
 	const photos: string[] = [
 		"bottom-bun",
@@ -44,7 +45,7 @@
 						v-for="ingredient in ingredients"
 						:key="ingredient.id"
 					>
-						<input type="number" class="ingredient__ammount" />
+						<InputNumber />
 						<div class="ingredient__bg">
 							<img
 								:src="ingredient.photo"
@@ -92,10 +93,6 @@
 
 	.ingredient__picture {
 		width: 75%;
-	}
-
-	.ingredient__ammount {
-		width: 100%;
 	}
 
 	.ingredient__name {
