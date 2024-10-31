@@ -6,6 +6,22 @@
 	defineProps<{
 		burger: burger;
 	}>();
+
+	const emit = defineEmits(["burgerRemoved"]);
+
+	function onBurgerRemove(burger: burger): void {
+		// Always get up do date burgers list
+		const burgers: burger[] = JSON.parse(
+			localStorage.getItem("burgers") || "[]"
+		);
+
+		// Burger name is unique so we can filter using it
+		const filteredBurgers = JSON.stringify(
+			burgers.filter((item) => item.name !== burger.name)
+		);
+		localStorage.setItem("burgers", filteredBurgers);
+		emit("burgerRemoved");
+	}
 </script>
 
 <template>
@@ -13,7 +29,9 @@
 		<BurgerRenderer :burgerIngredients="burger.ingredients" />
 		<div class="burger__content">
 			<span class="burger-card__name">{{ burger.name }}</span>
-			<button class="burger-card__button"><TrashIcon /> Remove</button>
+			<button class="burger-card__button" @click="onBurgerRemove(burger)">
+				<TrashIcon /> Remove
+			</button>
 		</div>
 	</div>
 </template>

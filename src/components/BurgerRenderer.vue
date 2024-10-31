@@ -1,7 +1,7 @@
 <script setup lang="ts">
 	import type { burgerIngredient } from "@/types";
 
-	const props = defineProps<{
+	defineProps<{
 		burgerIngredients: burgerIngredient[];
 	}>();
 </script>
