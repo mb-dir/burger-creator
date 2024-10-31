@@ -27,8 +27,8 @@
 			error.value = "Ingredient number must be positive";
 			return;
 		}
-		emit("decrease");
-		htmlInputNumber.value?.stepDown();
+
+		emit("decrease", htmlInputNumber.value);
 		htmlInputNumber.value?.dispatchEvent(
 			new Event("input", { bubbles: true, cancelable: true })
 		);

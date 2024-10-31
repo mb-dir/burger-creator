@@ -12,9 +12,9 @@
 
 	const emit = defineEmits(["addIngredient", "removeIngredient"]);
 
-	function onDecrease(): void {
+	function onDecrease(htmlInputNumberRef: HTMLInputElement): void {
 		const ingredient = getIngredient();
-		emit("removeIngredient", ingredient);
+		emit("removeIngredient", ingredient, htmlInputNumberRef);
 	}
 
 	function onIncrease(htmlInputNumberRef: HTMLInputElement): void {
