@@ -69,6 +69,7 @@
 		}
 
 		// Delete ingredient from the top of the stack
+		//@ts-ignore - seems like ts has no type definition for this method even though it was added about year ago and has suppurt in all browsers - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/findLastIndex
 		const lastIndex: number = burgerIngredients.value.findLastIndex(
 			(item: burgerIngredient) => item.id === ingredient.id
 		);
