@@ -1,6 +1,6 @@
 <script setup lang="ts">
 	import { computed, ref } from "vue";
-	import type { burgerIngredient } from "@/types";
+	import type { burgerIngredient, burger } from "@/types";
 	import Ingredient from "@/components/Ingredient.vue";
 	import BurgerRenderer from "@/components/BurgerRenderer.vue";
 	// Not going to change via user actions, no need to keep it as ref
@@ -113,12 +113,19 @@
 			return;
 		}
 
-		const burgers = JSON.parse(localStorage.getItem("burgers") || "[]");
+		const burgers: burger[] = JSON.parse(
+			localStorage.getItem("burgers") || "[]"
+		);
 
-		const readyBurger = {
+		const readyBurger: burger = {
 			name: form.value.burgerName,
 			ingredients: burgerIngredients.value,
 		};
+
+		if (burgers.some((el) => el.name === readyBurger.name)) {
+			formError.value = "Burger name must be unique";
+			return;
+		}
 
 		burgers.push(readyBurger);
 		burgerIngredients.value = [];
