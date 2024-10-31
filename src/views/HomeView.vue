@@ -2,8 +2,7 @@
 	import { computed, ref } from "vue";
 	import type { burgerIngredient, burger } from "@/types";
 	import Ingredient from "@/components/Ingredient.vue";
-	import BurgerRenderer from "@/components/BurgerRenderer.vue";
-	import CheckIcon from "@/components/icons/CheckIcon.vue";
+	import BurgerSummary from "@/components/BurgerSummary.vue";
 
 	// Not going to change via user actions, no need to keep it as ref
 	const photoNames: string[] = [
@@ -16,13 +15,8 @@
 		"ingredient-cheese",
 	];
 
-	const error = ref<null | string>(null);
+	const ingredientsError = ref<null | string>(null);
 	const isSavedSuccessfully = ref<boolean>(false);
-	const formError = ref<null | string>(null);
-
-	const form = ref({
-		burgerName: "",
-	});
 
 	const burgerCounter = ref(0);
 
@@ -65,32 +59,32 @@
 		ingredient: burgerIngredient,
 		htmlInputNumberRef: HTMLInputElement
 	): void {
-		error.value = null;
+		ingredientsError.value = null;
 		isSavedSuccessfully.value = false;
 
 		// Bottom bun has id 1, top bun has id 2
 		if (burgerIngredients.value.length === 0 && ingredient.id !== 1) {
-			error.value = "First item must be bottom bun";
+			ingredientsError.value = "First item must be bottom bun";
 			return;
 		}
 
 		if (burgerIngredients.value.length > 0 && ingredient.id === 1) {
-			error.value = "You can add only one bottom bun";
+			ingredientsError.value = "You can add only one bottom bun";
 			return;
 		}
 
 		if (isBurgerFinish.value && ingredient.id !== 2) {
-			error.value = "You cannot add ingredient on top of the bun";
+			ingredientsError.value = "You cannot add ingredient on top of the bun";
 			return;
 		}
 
 		if (isBurgerFinish.value && ingredient.id === 2) {
-			error.value = "You can add only one top bun";
+			ingredientsError.value = "You can add only one top bun";
 			return;
 		}
 
 		if (burgerIngredients.value.length === 8 && ingredient.id !== 2) {
-			error.value =
+			ingredientsError.value =
 				"The maximum number of items is nine including buns. Last item must be top bun";
 			return;
 		}
@@ -103,13 +97,14 @@
 		ingredient: burgerIngredient,
 		htmlInputNumberRef: HTMLInputElement
 	): void {
-		error.value = null;
+		ingredientsError.value = null;
 
 		// Bottom bun has id 1, top bun has id 2
 		// Prevent deleting bottom bun when something is on top of it
 
 		if (ingredient.id === 1 && burgerIngredients.value.length > 1) {
-			error.value = "You cannot remove bottom bun when ingredients are on it";
+			ingredientsError.value =
+				"You cannot remove bottom bun when ingredients are on it";
 			return;
 		}
 
@@ -125,40 +120,6 @@
 
 		// Only after validated removing ingredient decrease its number
 		htmlInputNumberRef.stepDown();
-	}
-
-	function onBurgerAdd(): void {
-		formError.value = null;
-		if (!form.value.burgerName.trim()) {
-			formError.value = "Provide correct burger name";
-			return;
-		}
-
-		const burgers: burger[] = JSON.parse(
-			localStorage.getItem("burgers") || "[]"
-		);
-
-		const readyBurger: burger = {
-			name: form.value.burgerName,
-			ingredients: burgerIngredients.value,
-		};
-
-		if (burgers.some((el) => el.name === readyBurger.name)) {
-			formError.value = "Burger name must be unique";
-			return;
-		}
-
-		burgers.push(readyBurger);
-		burgerIngredients.value = [];
-		form.value.burgerName = "";
-
-		localStorage.setItem("burgers", JSON.stringify(burgers));
-
-		isSavedSuccessfully.value = true;
-		formError.value = null;
-		error.value = null;
-
-		burgerCounter.value++; // Increment the counter to reset Ingredient with InputNumber components
 	}
 </script>
 
@@ -176,10 +137,20 @@
 				/>
 			</div>
 
-			<div class="burger-summary">
+			<BurgerSummary
+				:isBurgerFinish
+				v-model:burgerIngredients="burgerIngredients"
+				v-model:ingredientsError="ingredientsError"
+				v-model:isSavedSuccessfully="isSavedSuccessfully"
+				v-model:burgerCounter="burgerCounter"
+			/>
+
+			<!-- <div class="burger-summary">
 				<h2 class="burger-summary__title">Your Burger</h2>
 
-				<div v-if="error" class="burger-summary__error">{{ error }}</div>
+				<div v-if="ingredientsError" class="burger-summary__error">
+					{{ ingredientsError }}
+				</div>
 				<div v-if="isSavedSuccessfully" class="burger-summary__success">
 					Burger saved successfully <CheckIcon />
 				</div>
@@ -188,7 +159,7 @@
 					<BurgerRenderer :burgerIngredients />
 				</div>
 				<span
-					v-else-if="!error && !isSavedSuccessfully"
+					v-else-if="!ingredientsError && !isSavedSuccessfully"
 					class="burger-summary__no-content"
 					>Add items to create Your burger. First item must be bottom bun. To
 					finish Your burger choose top bun</span
@@ -211,7 +182,7 @@
 					</div>
 					<button class="burger-form__button">Save</button>
 				</form>
-			</div>
+			</div> -->
 		</div>
 	</main>
 </template>
@@ -250,59 +221,5 @@
 
 	.ingredient__name {
 		text-wrap: nowrap;
-	}
-
-	.burger-summary__no-content {
-		color: var(--secondary-text-color);
-	}
-
-	.burger-summary__error {
-		color: var(--danger-color);
-		margin: 20px 0;
-	}
-
-	.burger-summary__success {
-		color: var(--success-color);
-		margin: 20px 0;
-	}
-
-	.burger-form {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		margin-top: 32px;
-		gap: 8px;
-	}
-
-	.burger-form__input {
-		background-color: transparent;
-		border: none;
-		color: var(--primary-text-color);
-		text-align: center;
-		font-size: 20px;
-	}
-
-	.burger-form__input::placeholder {
-		color: var(--primary-text-color);
-	}
-
-	.burger-form__button {
-		background-color: var(--primary-text-color);
-		color: black;
-		border: none;
-		padding: 20px 32px;
-		border-radius: 100%;
-		cursor: pointer;
-	}
-
-	.burger-form__error {
-		line-height: 0;
-		height: 6px;
-		text-wrap: nowrap;
-	}
-
-	.burger-form__error-message {
-		font-size: 12px;
-		color: var(--danger-color);
 	}
 </style>
