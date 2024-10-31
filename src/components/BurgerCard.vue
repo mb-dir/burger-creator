@@ -11,8 +11,10 @@
 <template>
 	<div class="burger-card">
 		<BurgerRenderer :burgerIngredients="burger.ingredients" />
-		<span class="burger-card__name">{{ burger.name }}</span>
-		<button class="burger-card__button"><TrashIcon /> Remove</button>
+		<div class="burger__content">
+			<span class="burger-card__name">{{ burger.name }}</span>
+			<button class="burger-card__button"><TrashIcon /> Remove</button>
+		</div>
 	</div>
 </template>
 
@@ -22,6 +24,12 @@
 		display: flex;
 		flex-direction: column;
 		justify-content: space-between;
+	}
+
+	.burger__content {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
 	}
 
 	.burger-card__button {
