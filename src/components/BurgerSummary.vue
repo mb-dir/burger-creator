@@ -11,11 +11,13 @@
 	});
 	const formError = ref<null | string>(null);
 
-	const burgerIngredients =
-		defineModel<burgerIngredient[]>("burgerIngredients");
+	const burgerIngredients = defineModel<burgerIngredient[]>(
+		"burgerIngredients",
+		{ default: [] }
+	);
 	const isSavedSuccessfully = defineModel<boolean>("isSavedSuccessfully");
 	const ingredientsError = defineModel<string | null>("ingredientsError");
-	const burgerCounter = defineModel<number>("burgerCounter");
+	const burgerCounter = defineModel<number>("burgerCounter", { default: 0 });
 
 	function onBurgerAdd(): void {
 		formError.value = null;
@@ -30,7 +32,7 @@
 
 		const readyBurger: burger = {
 			name: form.value.burgerName,
-			ingredients: burgerIngredients.value || [],
+			ingredients: burgerIngredients.value,
 		};
 
 		if (burgers.some((el) => el.name === readyBurger.name)) {
@@ -63,10 +65,7 @@
 			Burger saved successfully <CheckIcon />
 		</div>
 
-		<div
-			class="burger-summary__burger"
-			v-if="burgerIngredients && burgerIngredients.length > 0"
-		>
+		<div class="burger-summary__burger" v-if="burgerIngredients.length > 0">
 			<BurgerRenderer :burgerIngredients />
 		</div>
 		<span
