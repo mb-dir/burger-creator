@@ -101,4 +101,22 @@
 		grid-template-columns: repeat(3, 175px);
 		gap: 32px;
 	}
+
+	@media (max-width: 1024px) {
+		.burger-creator {
+			grid-template-columns: repeat(3, 150px);
+		}
+	}
+
+	@media (max-width: 768px) {
+		.burger-creator {
+			justify-content: center;
+		}
+	}
+
+	@media (max-width: 576px) {
+		.burger-creator {
+			grid-template-columns: repeat(2, 125px);
+		}
+	}
 </style>

@@ -60,4 +60,16 @@
 	.ingredient__name {
 		text-wrap: nowrap;
 	}
+
+	@media (max-width: 1024px) {
+		.ingredient__bg {
+			height: 150px;
+		}
+	}
+
+	@media (max-width: 576px) {
+		.ingredient__bg {
+			height: 125px;
+		}
+	}
 </style>

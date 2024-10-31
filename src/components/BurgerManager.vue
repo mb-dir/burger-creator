@@ -46,6 +46,19 @@
 	.burger-manager {
 		padding: 16px;
 		display: grid;
+		gap: 16px;
 		grid-template-columns: 1fr 1fr;
+	}
+
+	@media (max-width: 1024px) {
+		.burger-manager {
+			grid-template-columns: 2fr 1fr;
+		}
+	}
+
+	@media (max-width: 768px) {
+		.burger-manager {
+			grid-template-columns: 1fr;
+		}
 	}
 </style>

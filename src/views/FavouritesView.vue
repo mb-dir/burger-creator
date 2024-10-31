@@ -39,4 +39,23 @@
 	.no-burgers {
 		color: var(--secondary-text-color);
 	}
+
+	@media (max-width: 1024px) {
+		.burgers-grid {
+			grid-template-columns: repeat(4, 1fr);
+		}
+	}
+
+	@media (max-width: 768px) {
+		.burgers-grid {
+			grid-template-columns: repeat(3, 1fr);
+			padding: 16px 0;
+		}
+	}
+
+	@media (max-width: 576px) {
+		.burgers-grid {
+			grid-template-columns: repeat(2, 1fr);
+		}
+	}
 </style>
