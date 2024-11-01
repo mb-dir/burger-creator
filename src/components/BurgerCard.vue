@@ -2,6 +2,7 @@
 	import type { burger } from "@/types";
 	import BurgerRenderer from "./BurgerRenderer.vue";
 	import TrashIcon from "./icons/TrashIcon.vue";
+	import { RouterLink } from "vue-router";
 
 	defineProps<{
 		burger: burger;
@@ -26,7 +27,11 @@
 
 <template>
 	<div class="burger-card">
-		<BurgerRenderer :burgerIngredients="burger.ingredients" />
+		<RouterLink
+			:to="{ name: 'single-favourite', params: { name: burger.name } }"
+		>
+			<BurgerRenderer :burgerIngredients="burger.ingredients" />
+		</RouterLink>
 		<div class="burger__content">
 			<span class="burger-card__name">{{ burger.name }}</span>
 			<button class="burger-card__button" @click="onBurgerRemove(burger)">

@@ -16,7 +16,7 @@
 		<RouterLink
 			activeClass="navigation__item--active"
 			class="navigation__item"
-			to="/favorite"
+			to="/favourite"
 		>
 			<HeartIcon />
 		</RouterLink>
