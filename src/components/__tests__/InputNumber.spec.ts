@@ -9,9 +9,9 @@ describe("InputNumber", () => {
 		const buttons = wrapper.findAll("button");
 		const input = wrapper.find("input");
 
-		expect(input.attributes).toBeTruthy();
+		expect(input.attributes("disabled")).toBeDefined();
 		expect(buttons.length).toBe(2);
-		expect(input).toBeTruthy;
+		expect(input.exists()).toBe(true);
 	});
 
 	it("should emit actions when buttons are clicked", () => {

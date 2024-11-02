@@ -36,7 +36,7 @@ describe("BurgerCard", () => {
 		],
 	};
 
-	it("should render card with burger", async () => {
+	it("should render card with burger", () => {
 		const wrapper = mount(BurgerCard, {
 			props: { burger },
 			global: {
@@ -44,7 +44,7 @@ describe("BurgerCard", () => {
 			},
 		});
 
-		await router.isReady();
+		router.isReady();
 
 		const burgerName = wrapper.find(".burger-card__name").text();
 		const ingredientImgs = wrapper.findAll("img");
@@ -53,7 +53,7 @@ describe("BurgerCard", () => {
 		expect(ingredientImgs.length).toEqual(2);
 	});
 
-	it("should redirect to single burger view", async () => {
+	it("should redirect to single burger view", () => {
 		const mockRouterPush = vi.spyOn(router, "push");
 		const wrapper = mount(BurgerCard, {
 			props: { burger },
@@ -62,11 +62,11 @@ describe("BurgerCard", () => {
 			},
 		});
 
-		await router.isReady();
+		router.isReady();
 
 		const link = wrapper.findComponent({ name: "RouterLink" });
 
-		await link.trigger("click");
+		link.trigger("click");
 
 		expect(mockRouterPush).toHaveBeenCalledWith({
 			name: "single-favourite",
@@ -74,7 +74,7 @@ describe("BurgerCard", () => {
 		});
 	});
 
-	it("should emit remove action", async () => {
+	it("should emit remove action", () => {
 		const wrapper = mount(BurgerCard, {
 			props: { burger },
 			global: {
@@ -82,7 +82,7 @@ describe("BurgerCard", () => {
 			},
 		});
 
-		await router.isReady();
+		router.isReady();
 
 		const removeBtn = wrapper.find("button");
 		removeBtn.trigger("click");
